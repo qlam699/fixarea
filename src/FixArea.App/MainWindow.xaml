@@ -1,0 +1,61 @@
+<Window
+    x:Class="FixArea.App.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:tb="using:H.NotifyIcon"
+    Title="FixArea">
+
+    <Grid x:Name="RootGrid" Padding="28" RowSpacing="18" MinWidth="520">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <tb:TaskbarIcon
+            x:Name="TrayIcon"
+            ToolTipText="FixArea — Screen Region Locker"
+            IconSource="ms-appx:///Assets/icon.ico"
+            LeftClickCommand="{x:Bind ShowFromTrayCommand}"
+            NoLeftClickDelay="True">
+            <tb:TaskbarIcon.ContextFlyout>
+                <MenuFlyout>
+                    <MenuFlyoutItem Text="Open FixArea" Click="OpenTray_Click"/>
+                    <MenuFlyoutSeparator/>
+                    <MenuFlyoutItem Text="Exit" Click="ExitTray_Click"/>
+                </MenuFlyout>
+            </tb:TaskbarIcon.ContextFlyout>
+        </tb:TaskbarIcon>
+
+        <StackPanel Grid.Row="0" Spacing="4">
+            <TextBlock Text="FixArea" FontSize="24" FontWeight="SemiBold"/>
+            <TextBlock
+                Text="Ctrl+Alt+R create region. Ctrl+Alt+Enter snap focused window. Ctrl+Alt+X delete region."
+                Opacity="0.7"
+                TextWrapping="Wrap"/>
+        </StackPanel>
+
+        <StackPanel Grid.Row="1" Orientation="Horizontal" Spacing="8">
+            <Button Content="Create region" Click="Create_Click" Style="{StaticResource AccentButtonStyle}"/>
+            <Button Content="Delete region" Click="Delete_Click" IsEnabled="{x:Bind ViewModel.HasRegion, Mode=OneWay}"/>
+        </StackPanel>
+
+        <TextBlock
+            Grid.Row="2"
+            Text="{x:Bind ViewModel.RegionStatus, Mode=OneWay}"
+            Opacity="0.8"/>
+
+        <CheckBox
+            Grid.Row="3"
+            Content="Start with Windows"
+            IsChecked="{x:Bind ViewModel.StartWithWindows, Mode=TwoWay}"/>
+
+        <TextBlock
+            Grid.Row="4"
+            Opacity="0.5"
+            Text="Closing this window hides FixArea in the tray."
+            TextWrapping="Wrap"/>
+    </Grid>
+</Window>
