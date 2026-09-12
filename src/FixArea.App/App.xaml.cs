@@ -59,8 +59,27 @@ public partial class App : Application
 
     public static void ExitApp()
     {
-        Locker.Dispose();
+        try
+        {
+            Locker.Dispose();
+        }
+        catch
+        {
+            // Continue shutdown even if native cleanup fails.
+        }
+
+        try
+        {
+            MainWnd?.Close();
+        }
+        catch
+        {
+            // Ignore if the window is already closing.
+        }
+
+        MainWnd = null;
         Current.Exit();
+        Environment.Exit(0);
     }
 
     static void Dispatch(Action action)

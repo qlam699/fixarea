@@ -9,24 +9,49 @@ public sealed partial class MainWindow : Window
 {
     public MainViewModel ViewModel { get; }
     public IRelayCommand ShowFromTrayCommand { get; }
+    public IRelayCommand ExitFromTrayCommand { get; }
+
+    bool _exiting;
+    bool _fitting;
 
     public MainWindow()
     {
         InitializeComponent();
         ViewModel = new MainViewModel(App.Locker);
         ShowFromTrayCommand = new RelayCommand(App.ShowMainWindow);
+        ExitFromTrayCommand = new RelayCommand(RequestExit);
         Title = "FixArea";
 
         RootGrid.Loaded += (_, _) => FitToContent();
 
         AppWindow.Closing += (_, e) =>
         {
+            if (_exiting)
+                return;
+
             e.Cancel = true;
             AppWindow.Hide();
         };
     }
 
-    bool _fitting;
+    public void RequestExit()
+    {
+        if (_exiting)
+            return;
+
+        _exiting = true;
+
+        try
+        {
+            TrayIcon.Dispose();
+        }
+        catch
+        {
+            // Ignore tray cleanup failures during shutdown.
+        }
+
+        App.ExitApp();
+    }
 
     void FitToContent()
     {
@@ -53,8 +78,4 @@ public sealed partial class MainWindow : Window
     void Create_Click(object sender, RoutedEventArgs e) => ViewModel.CreateRegionCommand.Execute(null);
 
     void Delete_Click(object sender, RoutedEventArgs e) => ViewModel.DeleteRegionCommand.Execute(null);
-
-    void OpenTray_Click(object sender, RoutedEventArgs e) => App.ShowMainWindow();
-
-    void ExitTray_Click(object sender, RoutedEventArgs e) => App.ExitApp();
 }

@@ -22,9 +22,9 @@
             NoLeftClickDelay="True">
             <tb:TaskbarIcon.ContextFlyout>
                 <MenuFlyout>
-                    <MenuFlyoutItem Text="Open FixArea" Click="OpenTray_Click"/>
+                    <MenuFlyoutItem Text="Open FixArea" Command="{x:Bind ShowFromTrayCommand}"/>
                     <MenuFlyoutSeparator/>
-                    <MenuFlyoutItem Text="Exit" Click="ExitTray_Click"/>
+                    <MenuFlyoutItem Text="Exit" Command="{x:Bind ExitFromTrayCommand}"/>
                 </MenuFlyout>
             </tb:TaskbarIcon.ContextFlyout>
         </tb:TaskbarIcon>
