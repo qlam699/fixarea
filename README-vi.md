@@ -45,6 +45,24 @@ Exe:
 src/FixArea.App/bin/x64/Debug/net8.0-windows10.0.19041.0/FixArea.App.exe
 ```
 
+## Bản portable (ZIP)
+
+**Đừng** upload file `.exe` nhỏ (~268 KB) trong `bin/` lên GitHub Releases — bản đó cần nhiều DLL cùng thư mục, chạy một mình sẽ lỗi.
+
+`PublishSingleFile` của WinUI 3 hiện bị crash khi mở app. Hãy ship **thư mục self-contained dạng ZIP**:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts/publish-portable.ps1
+```
+
+Upload:
+
+```text
+publish/FixArea-portable-win-x64.zip
+```
+
+Người dùng giải nén rồi chạy `FixArea.App.exe` (không cần cài .NET). Không bật `PublishTrimmed` — sẽ làm WinUI lỗi.
+
 Cấu hình lưu tại:
 
 ```text

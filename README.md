@@ -45,6 +45,26 @@ Executable:
 src/FixArea.App/bin/x64/Debug/net8.0-windows10.0.19041.0/FixArea.App.exe
 ```
 
+## Portable release (ZIP)
+
+Do **not** upload the small Debug/Release `.exe` (~268 KB) from `bin/` — that build needs dozens of DLLs next to it and will not run alone.
+
+WinUI 3’s `PublishSingleFile` currently crashes on startup (`ClassFactory cannot supply requested class`). Ship a **self-contained folder as a ZIP** instead:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts/publish-portable.ps1
+```
+
+Upload:
+
+```text
+publish/FixArea-portable-win-x64.zip
+```
+
+Users extract the ZIP anywhere and run `FixArea.App.exe` (no .NET install needed). Folder is ~150 MB; the ZIP is smaller due to compression.
+
+Do not enable `PublishTrimmed` — it breaks WinUI.
+
 Config is stored at:
 
 ```text
